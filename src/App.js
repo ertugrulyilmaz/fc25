@@ -116,7 +116,7 @@ export default function App() {
         </div>
       </Drawer>
 
-      <Container style={{ marginTop: "0px", padding: 0, flexGrow: 0 }}>
+      <Container style={{ marginTop: "0px", padding: 5, flexGrow: 0 }}>
         {selectedMenu === "league-standings" && <LeagueStandings season={season} />}
         {selectedMenu === "team-league-standings" && <TeamStandings />}
         {selectedMenu === "playoffs" && <Playoffs />}
