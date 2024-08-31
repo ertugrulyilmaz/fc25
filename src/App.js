@@ -1,46 +1,127 @@
-import logo from "./logo.svg";
+import React, { useState } from "react";
+import Container from "@mui/material/Container";
+import Link from "@mui/material/Link";
 import "./App.css";
+import FormatListNumberedIcon from "@mui/icons-material/FormatListNumbered";
+import PeopleIcon from "@mui/icons-material/People";
+import AppBar from "@mui/material/AppBar";
+import Box from "@mui/material/Box";
+import Toolbar from "@mui/material/Toolbar";
+import Typography from "@mui/material/Typography";
+import Button from "@mui/material/Button";
+import IconButton from "@mui/material/IconButton";
+import MenuIcon from "@mui/icons-material/Menu";
+import Menu from "@mui/material/Menu";
+import MenuItem from "@mui/material/MenuItem";
+import Drawer from "@mui/material/Drawer";
+import List from "@mui/material/List";
+import ListItem from "@mui/material/ListItem";
+import ListItemText from "@mui/material/ListItemText";
+import Divider from "@mui/material/Divider";
+import InboxIcon from "@mui/icons-material/Inbox";
 
 import TournamentBracket from "./TournamentBracket";
+import Copyright from "./components/Copyright";
+import LeagueStandings from "./pages/LeagueStandings";
+import TeamStandings from "./pages/TeamStandings";
+import Playoffs from "./pages/Playoffs";
+import { ListItemButton, ListItemIcon, Select } from "@mui/material";
+import AccountTreeIcon from "@mui/icons-material/AccountTree";
+export default function App() {
+  const [drawerOpen, setDrawerOpen] = useState(false);
 
-const tournamentData = {
-  rounds: [
-    {
-      name: "Round 1",
-      matches: [
-        { teams: ["Caglar", "Ertugrul"], scores: [2, 2], result: "1-2" },
-        { teams: ["Harun", "Cagatay"], scores: [5, 1], result: "2-2" },
-        { teams: ["Diren", "Baris"], scores: [4, 0], result: "4-1" },
-        { teams: ["Levent", "HRT"], scores: [2, 2], result: "3-2" },
-      ],
-    },
-    {
-      name: "Quarterfinals",
-      matches: [
-        { teams: ["Ertugrul", "Huseyin"], scores: [3, 2], result: "3-1" },
-        { teams: ["Diren", "Levent"], scores: [2, 2], result: "2-3" },
-      ],
-    },
-    {
-      name: "Semifinals",
-      matches: [
-        { teams: ["Batu", "Ertugrul"], scores: [4, 0], result: "3-4" },
-        { teams: ["Huseyin", "Levent"], scores: [5, 0], result: "5-1" },
-      ],
-    },
-    {
-      name: "Final",
-      matches: [{ teams: ["Batu", "Huseyin"], scores: [0, 4] }],
-    },
-  ],
-};
+  const [selectedMenu, setSelectedMenu] = useState("league-standings");
 
-function App() {
+  const handleDrawerToggle = () => {
+    setDrawerOpen(!drawerOpen);
+  };
+
+  const handleMenuItemClick = (section) => {
+    setSelectedMenu(section);
+    setDrawerOpen(false);
+  };
+
+  const [season, setSeason] = React.useState(25);
+
+  const handleSeasonChange = (event) => {
+    setSeason(event.target.value);
+  };
+
+  const menuItems = [
+    {
+      text: "Lig Puan Durumu",
+      section: "league-standings",
+      icon: <FormatListNumberedIcon />,
+    },
+    { text: "Takim Puan Durumu", section: "team-league-standings", icon: <PeopleIcon /> },
+    { text: "Playoffs", section: "playoffs", icon: <AccountTreeIcon /> },
+  ];
+
   return (
-    <div className="App">
-      <TournamentBracket />
+    <div
+      style={{
+        minHeight: "100vh",
+        display: "flex",
+        flexDirection: "column",
+      }}
+    >
+      <AppBar position="static">
+        <Toolbar>
+          <IconButton
+            size="large"
+            edge="start"
+            color="inherit"
+            aria-label="menu"
+            onClick={handleDrawerToggle}
+            sx={{ mr: 2 }}
+          >
+            <MenuIcon />
+          </IconButton>
+          <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
+            FC League
+          </Typography>
+          <Select
+            value={season}
+            defaultValue={25}
+            label="Sezon"
+            size="small"
+            onChange={handleSeasonChange}
+          >
+            <MenuItem value={25}>25</MenuItem>
+            <MenuItem value={24}>24</MenuItem>
+          </Select>
+        </Toolbar>
+      </AppBar>
+
+      <Drawer anchor="left" open={drawerOpen} onClose={handleDrawerToggle}>
+        <div
+          role="presentation"
+          onClick={handleDrawerToggle}
+          onKeyDown={handleDrawerToggle}
+        >
+          <List>
+            {menuItems.map((item, index) => (
+              <ListItemButton
+                key={index}
+                selected={item.section === selectedMenu}
+                onClick={() => handleMenuItemClick(item.section)}
+              >
+                <ListItemIcon>{item.icon}</ListItemIcon>
+                <ListItemText primary={item.text} />
+              </ListItemButton>
+            ))}
+          </List>
+          <Divider />
+          {/* Add any other additional items or sections in the drawer here */}
+        </div>
+      </Drawer>
+
+      <Container style={{ marginTop: "0px", padding: 0, flexGrow: 1 }}>
+        {selectedMenu === "league-standings" && <LeagueStandings season={season} />}
+        {selectedMenu === "team-league-standings" && <TeamStandings />}
+        {selectedMenu === "playoffs" && <Playoffs />}
+        <Copyright />
+      </Container>
     </div>
   );
 }
-
-export default App;
