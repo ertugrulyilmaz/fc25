@@ -27,6 +27,7 @@ import TeamStandings from "./pages/TeamStandings";
 import Playoffs from "./pages/Playoffs";
 import { ListItemButton, ListItemIcon, Select } from "@mui/material";
 import AccountTreeIcon from "@mui/icons-material/AccountTree";
+import League from "./pages/League";
 export default function App() {
   const [drawerOpen, setDrawerOpen] = useState(false);
 
@@ -116,7 +117,7 @@ export default function App() {
       </Drawer>
 
       <Container style={{ marginTop: "0px", padding: 5, flexGrow: 0 }}>
-        {selectedMenu === "league-standings" && <LeagueStandings season={season} />}
+        {selectedMenu === "league-standings" && <League season={season} />}
         {selectedMenu === "team-league-standings" && <TeamStandings />}
         {selectedMenu === "playoffs" && <Playoffs />}
       </Container>
