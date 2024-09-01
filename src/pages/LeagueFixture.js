@@ -38,6 +38,7 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
 }));
 
 export default function LeagueFixture({ season, initialWeek, fixtureData }) {
+  const totalWeek = Object.keys(fixtureData).length;
   const [week, setWeek] = React.useState(initialWeek);
   const [rows, setRows] = React.useState([]);
 
@@ -46,13 +47,13 @@ export default function LeagueFixture({ season, initialWeek, fixtureData }) {
   };
 
   React.useEffect(() => {
-    setRows(fixtureData["week-" + week]);
+    setRows(fixtureData[week]);
   }, [fixtureData, week, setRows]);
 
   return (
     <div style={{ marginTop: 5 }}>
       <Grid container size={12} style={{ marginBottom: 5 }}>
-        <Grid item size={4} alignContent={"center"}>
+        <Grid size={4} alignContent={"center"}>
           <Box display="flex" justifyContent="flex-start">
             <IconButton
               disabled={week === 1}
@@ -70,10 +71,10 @@ export default function LeagueFixture({ season, initialWeek, fixtureData }) {
           </Box>
         </Grid>
         <Grid container size={4} direction={"row"}>
-          <Grid item size={6} justifyContent={"center"} alignContent={"center"}>
+          <Grid size={6} justifyContent={"center"} alignContent={"center"}>
             Fikstür
           </Grid>
-          <Grid item size={6}>
+          <Grid size={6}>
             <Select
               value={week}
               defaultValue={1}
@@ -81,7 +82,7 @@ export default function LeagueFixture({ season, initialWeek, fixtureData }) {
               size="small"
               onChange={handleWeekChange}
             >
-              {[...Array(12).keys()].map((i) => (
+              {[...Array(totalWeek).keys()].map((i) => (
                 <MenuItem key={i} value={i + 1}>
                   {i + 1}. Hafta
                 </MenuItem>
@@ -89,19 +90,21 @@ export default function LeagueFixture({ season, initialWeek, fixtureData }) {
             </Select>
           </Grid>
         </Grid>
-        <Grid item size={4} alignContent={"center"}>
+        <Grid size={4} alignContent={"center"}>
           <Box display="flex" justifyContent="flex-end">
             <IconButton
-              disabled={week === 12}
+              disabled={week === totalWeek}
               onClick={() => {
-                if (week < 12) {
+                if (week < totalWeek) {
                   setWeek(week + 1);
                 }
               }}
             >
               <KeyboardArrowRightIcon
-                disabled={week === 12}
-                style={{ color: week === 12 ? "rgba(0, 0, 0, 0.26)" : "#C8102E" }}
+                disabled={week === totalWeek}
+                style={{
+                  color: week === totalWeek ? "rgba(0, 0, 0, 0.26)" : "#C8102E",
+                }}
               />
             </IconButton>
           </Box>
@@ -123,29 +126,30 @@ export default function LeagueFixture({ season, initialWeek, fixtureData }) {
             </TableRow>
           </TableHead>
           <TableBody>
-            {rows.map((row) => (
+            {rows.map((row, index) => (
               <StyledTableRow
-                key={row.teamId}
+                key={index}
                 sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
               >
                 <StyledTableCell align="left">
                   <img
-                    src={"/fc25/img/" + season + "/" + row.teamHomeId + ".png"}
+                    src={"/fc25/img/" + season + "/" + row.homeTeamId + ".png"}
                     width={24}
                     height={24}
                     style={{ marginRight: 10, verticalAlign: "middle" }}
                   />
-                  <b>{row.teamHome}</b>
+                  <b>{row.homeTeam}</b>
                 </StyledTableCell>
                 <StyledTableCell align="center">
                   <span style={{ fontSize: 16 }}>
-                    {row.scoreHome} - {row.scoreAway}
+                    {row.homeScore === -1 ? "" : row.homeScore} -{" "}
+                    {row.awayScore === -1 ? "" : row.awayScore}
                   </span>
                 </StyledTableCell>
                 <StyledTableCell align="right">
-                  <b>{row.teamAway}</b>
+                  <b>{row.awayTeam}</b>
                   <img
-                    src={"/fc25/img/" + season + "/" + row.teamAwayId + ".png"}
+                    src={"/fc25/img/" + season + "/" + row.awayTeamId + ".png"}
                     width={24}
                     height={24}
                     style={{ marginLeft: 10, verticalAlign: "middle" }}

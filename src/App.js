@@ -1,8 +1,7 @@
 import React, { useState } from "react";
 import Container from "@mui/material/Container";
 import "./App.css";
-import FormatListNumberedIcon from "@mui/icons-material/FormatListNumbered";
-import PeopleIcon from "@mui/icons-material/People";
+
 import AppBar from "@mui/material/AppBar";
 import Toolbar from "@mui/material/Toolbar";
 import Typography from "@mui/material/Typography";
@@ -16,113 +15,20 @@ import Divider from "@mui/material/Divider";
 
 import TeamStandings from "./pages/TeamStandings";
 import Playoffs from "./pages/Playoffs";
-import { ListItemButton, ListItemIcon, Select } from "@mui/material";
-import AccountTreeIcon from "@mui/icons-material/AccountTree";
+import {
+  Box,
+  CircularProgress,
+  ListItemButton,
+  ListItemIcon,
+  Select,
+} from "@mui/material";
 import League from "./pages/League";
-
-const MENU_ITEMS = [
-  {
-    text: "Lig Puan Durumu",
-    section: "league-standings",
-    icon: <FormatListNumberedIcon />,
-  },
-  { text: "Takim Puan Durumu", section: "team-league-standings", icon: <PeopleIcon /> },
-  { text: "Playoffs", section: "playoffs", icon: <AccountTreeIcon /> },
-];
-
-function createFixtureData(
-  teamHome,
-  playerHome,
-  teamHomeId,
-  teamAway,
-  playerAway,
-  teamAwayId,
-  scoreHome,
-  scoreAway
-) {
-  return {
-    teamHome,
-    playerHome,
-    teamHomeId,
-    teamAway,
-    playerAway,
-    teamAwayId,
-    scoreHome,
-    scoreAway,
-  };
-}
-
-const FIXTURE_DATA = {
-  "season-3": {
-    "week-1": [],
-    "week-2": [],
-    "week-3": [],
-    "week-4": [],
-    "week-5": [],
-    "week-6": [],
-    "week-7": [],
-    "week-8": [],
-    "week-9": [],
-    "week-10": [],
-    "week-11": [],
-    "week-12": [],
-  },
-  "season-2": {
-    "week-1": [
-      createFixtureData("Lens", "Batu", 1, "Everton", "Ertuğrul", 9, 4, 0),
-      createFixtureData("Lens", "Batu", 1, "Everton", "Ertuğrul", 9, 4, 0),
-      createFixtureData("Lens", "Batu", 1, "Everton", "Ertuğrul", 9, 4, 0),
-      createFixtureData("Lens", "Batu", 1, "Everton", "Ertuğrul", 9, 4, 0),
-      createFixtureData("Lens", "Batu", 1, "Everton", "Ertuğrul", 9, 4, 0),
-    ],
-    "week-2": [
-      createFixtureData("Lens", "Huseyin C", 2, "Everton", "Ertuğrul", 8, 4, 0),
-      createFixtureData("Lens", "Batu", 1, "Everton", "Ertuğrul", 9, 4, 0),
-      createFixtureData("Lens", "Batu", 1, "Everton", "Ertuğrul", 9, 4, 0),
-      createFixtureData("Lens", "Batu", 1, "Everton", "Ertuğrul", 9, 4, 0),
-      createFixtureData("Lens", "Batu", 1, "Everton", "Ertuğrul", 9, 4, 0),
-    ],
-  },
-  "season-1": {
-    "week-1": [],
-    "week-2": [],
-    "week-3": [],
-    "week-4": [],
-    "week-5": [],
-    "week-6": [],
-    "week-7": [],
-    "week-8": [],
-    "week-9": [],
-    "week-10": [],
-    "week-11": [],
-    "week-12": [],
-  },
-};
-
-function createStandingsData(teamName, player, teamId, o, g, b, m, a, y, av, p) {
-  return { teamName, player, teamId, o, g, b, m, a, y, av, p };
-}
-
-const STANDINGS_DATA = {
-  "season-3": [],
-  "season-2": [
-    createStandingsData("Eintracht Frankfurt", "Batu", 1, 18, 15, 3, 0, 79, 21, 58, 48),
-    createStandingsData("Lens", "Hüseyin C", 2, 18, 13, 4, 1, 64, 18, 46, 43),
-    createStandingsData("Feyenoord", "Diren", 3, 18, 11, 1, 6, 39, 36, 3, 34),
-    createStandingsData("Bournemouth", "Harun", 4, 18, 10, 2, 6, 41, 33, 8, 32),
-    createStandingsData("Brighton", "Çağlar", 5, 18, 7, 3, 8, 36, 34, 2, 24),
-    createStandingsData("Mallorca", "Levent", 6, 18, 6, 4, 8, 30, 45, -15, 22),
-    createStandingsData("Brentford", "Hüseyin T", 7, 18, 6, 3, 9, 24, 35, -11, 21),
-    createStandingsData("Everton", "Ertuğrul", 9, 18, 4, 4, 10, 18, 37, -19, 16),
-    createStandingsData("Celta Vigo", "Çağatay", 8, 18, 4, 3, 11, 20, 49, -29, 15),
-    createStandingsData("Nice", "Barış", 10, 18, 0, 1, 17, 20, 63, -43, 1),
-  ],
-  "season-1": [],
-};
+import useFetch from "react-fetch-hook";
+import ErrorPage from "./pages/ErrorPage";
+import { DATA_URLS, MENU_ITEMS, TEAMS, TEST_DATA_URL } from "./Data";
 
 export default function App() {
   const [drawerOpen, setDrawerOpen] = useState(false);
-
   const [selectedMenu, setSelectedMenu] = useState("league-standings");
 
   const handleDrawerToggle = () => {
@@ -134,12 +40,149 @@ export default function App() {
     setDrawerOpen(false);
   };
 
+  const IS_DEV = window.location.href.startsWith("http://127.0.0.1:3000");
   const [season, setSeason] = React.useState("season-2");
+  const [dataUrl, setDataUrl] = React.useState(
+    IS_DEV ? TEST_DATA_URL : DATA_URLS["season-2"]
+  );
   const [initialWeek, setInitialWeek] = React.useState(1);
 
   const handleSeasonChange = (event) => {
     setSeason(event.target.value);
+    setDataUrl(DATA_URLS[event.target.value]);
   };
+
+  const safeParseInt = (v) => (v == null ? -1 : parseInt(v));
+  const getTeamID = (v, season) => TEAMS[season][v].id;
+  const getTeamName = (v, season) => TEAMS[season][v].teamName;
+  const getPlayer = (v, season) => TEAMS[season][v].player;
+  const getPartnerTeamID = (v, season) => TEAMS[season][v].partnerId;
+
+  const { isLoading, error, data } = useFetch(dataUrl, {
+    formatter: async (response) => {
+      const content = await response.text();
+      const json = JSON.parse(content.substring(47).slice(0, -2));
+      return json.table.rows
+        .filter((row) => row.c.length > 4)
+        .map((row) => ({
+          week: row.c[0].v,
+          homeTeamId: getTeamID(row.c[1].v, season),
+          homeTeam: getTeamName(row.c[1].v, season),
+          homePlayer: getPlayer(row.c[1].v, season),
+          awayTeamId: getTeamID(row.c[2].v, season),
+          awayTeam: getTeamName(row.c[2].v, season),
+          awayPlayer: getPlayer(row.c[2].v, season),
+          homeScore: safeParseInt(row.c[3].v),
+          awayScore: safeParseInt(row.c[4].v),
+        }));
+    },
+  });
+
+  if (isLoading) {
+    return (
+      <Box
+        sx={{
+          display: "flex",
+          height: "100vh",
+          alignItems: "center",
+          justifyContent: "center",
+        }}
+      >
+        <CircularProgress />
+      </Box>
+    );
+  }
+
+  if (error) {
+    return <ErrorPage error={error} />;
+  }
+
+  const fixtureData = data.reduce((acc, curr) => {
+    if (!acc.hasOwnProperty(curr.week)) {
+      acc[curr.week] = [];
+    }
+    acc[curr.week].push(curr);
+    return acc;
+  }, {});
+
+  const standingsData = Object.values(
+    data.reduce((acc, curr) => {
+      if (!acc.hasOwnProperty(curr.homeTeam)) {
+        acc[curr.homeTeam] = {
+          teamId: curr.homeTeamId,
+          teamName: curr.homeTeam,
+          player: curr.homePlayer,
+          o: 0,
+          g: 0,
+          b: 0,
+          m: 0,
+          a: 0,
+          y: 0,
+          av: 0,
+          p: 0,
+        };
+      }
+
+      if (!acc.hasOwnProperty(curr.awayTeam)) {
+        acc[curr.awayTeam] = {
+          teamId: curr.awayTeamId,
+          teamName: curr.awayTeam,
+          player: curr.awayPlayer,
+          o: 0,
+          g: 0,
+          b: 0,
+          m: 0,
+          a: 0,
+          y: 0,
+          av: 0,
+          p: 0,
+        };
+      }
+
+      if (curr.homeScore >= 0 && curr.awayScore >= 0) {
+        if (curr.homeScore === curr.awayScore) {
+          acc[curr.homeTeam].b++;
+          acc[curr.awayTeam].b++;
+          acc[curr.homeTeam].p++;
+          acc[curr.awayTeam].p++;
+        } else if (curr.homeScore >= curr.awayScore) {
+          acc[curr.homeTeam].g++;
+          acc[curr.awayTeam].m++;
+          acc[curr.homeTeam].p += 3;
+        } else {
+          acc[curr.homeTeam].m++;
+          acc[curr.awayTeam].g++;
+          acc[curr.awayTeam].p += 3;
+        }
+
+        acc[curr.homeTeam].o++;
+        acc[curr.awayTeam].o++;
+        acc[curr.homeTeam].a += curr.homeScore;
+        acc[curr.awayTeam].a += curr.awayScore;
+        acc[curr.homeTeam].y += curr.awayScore;
+        acc[curr.awayTeam].y += curr.homeScore;
+        acc[curr.homeTeam].av = acc[curr.homeTeam].a - acc[curr.homeTeam].y;
+        acc[curr.awayTeam].av = acc[curr.awayTeam].a - acc[curr.awayTeam].y;
+      }
+      return acc;
+    }, {})
+  ).sort((a, b) => {
+    console.log(a);
+    if (a.p > b.p) {
+      return -1;
+    } else if (a.p < b.p) {
+      return 1;
+    } else {
+      if (a.av > b.av) {
+        return -1;
+      } else if (a.av < b.av) {
+        return 1;
+      } else {
+        // TODO(ertu)
+      }
+      return 0;
+    }
+  });
 
   return (
     <div
@@ -205,9 +248,9 @@ export default function App() {
         {selectedMenu === "league-standings" && (
           <League
             season={season}
-            standingsData={STANDINGS_DATA[season]}
+            standingsData={standingsData}
             initialWeek={initialWeek}
-            fixtureData={FIXTURE_DATA[season]}
+            fixtureData={fixtureData}
           />
         )}
         {selectedMenu === "team-league-standings" && <TeamStandings />}
