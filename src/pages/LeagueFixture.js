@@ -8,7 +8,9 @@ import TableRow from "@mui/material/TableRow";
 import Paper from "@mui/material/Paper";
 import { styled } from "@mui/material/styles";
 import Grid from "@mui/material/Grid2";
-import { Typography } from "@mui/material";
+import { Box, MenuItem, Select, Typography } from "@mui/material";
+import KeyboardArrowLeftIcon from "@mui/icons-material/KeyboardArrowLeft";
+import KeyboardArrowRightIcon from "@mui/icons-material/KeyboardArrowRight";
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
   [`&.${tableCellClasses.head}`]: {
@@ -67,13 +69,49 @@ const ROWS = {
   ],
   24: [],
 };
-export default function LeagueFixture({ season }) {
+export default function LeagueFixture({ season, initialFixture }) {
   const rows = ROWS[season];
+
+  const [fixture, setFixture] = React.useState(initialFixture);
+
+  const handleFixtureChange = (event) => {
+    setFixture(event.target.value);
+  };
+
   return (
-    <div style={{ marginTop: 10 }}>
-      <Typography variant="h6" gutterBottom align="center">
-        Fikstür
-      </Typography>
+    <div style={{ marginTop: 5 }}>
+      <Grid container size={12} style={{ marginBottom: 5 }}>
+        <Grid item size={4} alignContent={"center"}>
+          <Box display="flex" justifyContent="flex-start">
+            <KeyboardArrowLeftIcon />
+          </Box>
+        </Grid>
+        <Grid container size={4} direction={"row"}>
+          <Grid item size={6} justifyContent={"center"} alignContent={"center"}>
+            Fikstür
+          </Grid>
+          <Grid item size={6}>
+            <Select
+              value={fixture}
+              defaultValue={1}
+              label="Sezon"
+              size="small"
+              onChange={handleFixtureChange}
+            >
+              {[...Array(12).keys()].map((i) => (
+                <MenuItem key={i} value={i + 1}>
+                  {i + 1}
+                </MenuItem>
+              ))}
+            </Select>
+          </Grid>
+        </Grid>
+        <Grid item size={4} alignContent={"center"}>
+          <Box display="flex" justifyContent="flex-end">
+            <KeyboardArrowRightIcon />
+          </Box>
+        </Grid>
+      </Grid>
       <TableContainer component={Paper}>
         <Table size="small" aria-label="a dense table">
           <TableHead>
@@ -105,7 +143,9 @@ export default function LeagueFixture({ season }) {
                   <b>{row.teamHome}</b>
                 </StyledTableCell>
                 <StyledTableCell align="center">
-                  {row.scoreHome} - {row.scoreAway}
+                  <span style={{ fontSize: 16 }}>
+                    {row.scoreHome} - {row.scoreAway}
+                  </span>
                 </StyledTableCell>
                 <StyledTableCell align="right">
                   <b>{row.teamAway}</b>

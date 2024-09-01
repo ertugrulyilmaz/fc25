@@ -43,6 +43,7 @@ export default function App() {
   };
 
   const [season, setSeason] = React.useState(25);
+  const [initialFixture, setInitialFixture] = React.useState(1);
 
   const handleSeasonChange = (event) => {
     setSeason(event.target.value);
@@ -117,7 +118,9 @@ export default function App() {
       </Drawer>
 
       <Container style={{ marginTop: "0px", padding: 5, flexGrow: 0 }}>
-        {selectedMenu === "league-standings" && <League season={season} />}
+        {selectedMenu === "league-standings" && (
+          <League season={season} initialFixture={initialFixture} />
+        )}
         {selectedMenu === "team-league-standings" && <TeamStandings />}
         {selectedMenu === "playoffs" && <Playoffs />}
       </Container>
