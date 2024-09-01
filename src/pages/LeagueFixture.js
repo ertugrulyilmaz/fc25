@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
 import TableCell, { tableCellClasses } from "@mui/material/TableCell";
@@ -8,13 +8,13 @@ import TableRow from "@mui/material/TableRow";
 import Paper from "@mui/material/Paper";
 import { styled } from "@mui/material/styles";
 import Grid from "@mui/material/Grid2";
-import { Box, MenuItem, Select, Typography } from "@mui/material";
+import { Box, IconButton, MenuItem, Select, Typography } from "@mui/material";
 import KeyboardArrowLeftIcon from "@mui/icons-material/KeyboardArrowLeft";
 import KeyboardArrowRightIcon from "@mui/icons-material/KeyboardArrowRight";
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
   [`&.${tableCellClasses.head}`]: {
-    backgroundColor: theme.palette.common.black,
+    backgroundColor: "#C8102E",
     color: theme.palette.common.white,
     fontSize: 12,
     padding: 4,
@@ -37,53 +37,36 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
   },
 }));
 
-function createData(
-  teamHome,
-  playerHome,
-  teamHomeId,
-  teamAway,
-  playerAway,
-  teamAwayId,
-  scoreHome,
-  scoreAway
-) {
-  return {
-    teamHome,
-    playerHome,
-    teamHomeId,
-    teamAway,
-    playerAway,
-    teamAwayId,
-    scoreHome,
-    scoreAway,
+export default function LeagueFixture({ season, initialWeek, fixtureData }) {
+  const [week, setWeek] = React.useState(initialWeek);
+  const [rows, setRows] = React.useState([]);
+
+  const handleWeekChange = (event) => {
+    setWeek(event.target.value);
   };
-}
 
-const ROWS = {
-  25: [
-    createData("Lens", "Batu", 1, "Everton", "Ertuğrul", 8, 4, 0),
-    createData("Lens", "Batu", 1, "Everton", "Ertuğrul", 8, 4, 0),
-    createData("Lens", "Batu", 1, "Everton", "Ertuğrul", 8, 4, 0),
-    createData("Lens", "Batu", 1, "Everton", "Ertuğrul", 8, 4, 0),
-    createData("Lens", "Batu", 1, "Everton", "Ertuğrul", 8, 4, 0),
-  ],
-  24: [],
-};
-export default function LeagueFixture({ season, initialFixture }) {
-  const rows = ROWS[season];
-
-  const [fixture, setFixture] = React.useState(initialFixture);
-
-  const handleFixtureChange = (event) => {
-    setFixture(event.target.value);
-  };
+  React.useEffect(() => {
+    setRows(fixtureData["week-" + week]);
+  }, [fixtureData, week, setRows]);
 
   return (
     <div style={{ marginTop: 5 }}>
       <Grid container size={12} style={{ marginBottom: 5 }}>
         <Grid item size={4} alignContent={"center"}>
           <Box display="flex" justifyContent="flex-start">
-            <KeyboardArrowLeftIcon />
+            <IconButton
+              disabled={week === 1}
+              onClick={() => {
+                if (week > 1) {
+                  setWeek(week - 1);
+                }
+              }}
+            >
+              <KeyboardArrowLeftIcon
+                disabled={week === 1}
+                style={{ color: week === 1 ? "rgba(0, 0, 0, 0.26)" : "#C8102E" }}
+              />
+            </IconButton>
           </Box>
         </Grid>
         <Grid container size={4} direction={"row"}>
@@ -92,15 +75,15 @@ export default function LeagueFixture({ season, initialFixture }) {
           </Grid>
           <Grid item size={6}>
             <Select
-              value={fixture}
+              value={week}
               defaultValue={1}
-              label="Sezon"
+              label="Fikstür"
               size="small"
-              onChange={handleFixtureChange}
+              onChange={handleWeekChange}
             >
               {[...Array(12).keys()].map((i) => (
                 <MenuItem key={i} value={i + 1}>
-                  {i + 1}
+                  {i + 1}. Hafta
                 </MenuItem>
               ))}
             </Select>
@@ -108,7 +91,19 @@ export default function LeagueFixture({ season, initialFixture }) {
         </Grid>
         <Grid item size={4} alignContent={"center"}>
           <Box display="flex" justifyContent="flex-end">
-            <KeyboardArrowRightIcon />
+            <IconButton
+              disabled={week === 12}
+              onClick={() => {
+                if (week < 12) {
+                  setWeek(week + 1);
+                }
+              }}
+            >
+              <KeyboardArrowRightIcon
+                disabled={week === 12}
+                style={{ color: week === 12 ? "rgba(0, 0, 0, 0.26)" : "#C8102E" }}
+              />
+            </IconButton>
           </Box>
         </Grid>
       </Grid>
@@ -135,7 +130,7 @@ export default function LeagueFixture({ season, initialFixture }) {
               >
                 <StyledTableCell align="left">
                   <img
-                    src={"/fc25/img/2024/" + row.teamHomeId + ".png"}
+                    src={"/fc25/img/" + season + "/" + row.teamHomeId + ".png"}
                     width={24}
                     height={24}
                     style={{ marginRight: 10, verticalAlign: "middle" }}
@@ -150,7 +145,7 @@ export default function LeagueFixture({ season, initialFixture }) {
                 <StyledTableCell align="right">
                   <b>{row.teamAway}</b>
                   <img
-                    src={"/fc25/img/2024/" + row.teamAwayId + ".png"}
+                    src={"/fc25/img/" + season + "/" + row.teamAwayId + ".png"}
                     width={24}
                     height={24}
                     style={{ marginLeft: 10, verticalAlign: "middle" }}
