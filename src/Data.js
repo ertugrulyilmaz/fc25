@@ -3,7 +3,7 @@ import FormatListNumberedIcon from "@mui/icons-material/FormatListNumbered";
 import PeopleIcon from "@mui/icons-material/People";
 
 export const TEST_DATA_URL =
-  "https://docs.google.com/spreadsheets/d/1y37_BZteHBnCIvwJoa5j9EsOxXvcAaFBbwDji65qxmY/gviz/tq";
+  "https://docs.google.com/spreadsheets/d/1iV4BsE_5roZQQnQbMlWl_0zn48b6Q6oWr5D5ZdBtEXg/gviz/tq";
 export const DATA_URLS = {
   "season-3":
     "https://docs.google.com/spreadsheets/d/1iV4BsE_5roZQQnQbMlWl_0zn48b6Q6oWr5D5ZdBtEXg/gviz/tq",
@@ -15,65 +15,65 @@ export const DATA_URLS = {
 
 export const TEAMS = {
   "season-3": {
-    Diren: {
+    "Sport-Club Freiburg": {
       id: 1,
       player: "Diren",
-      teamName: "Diren",
-      partnerId: 6,
-    },
-    Harun: {
-      id: 2,
-      player: "Harun",
-      teamName: "Harun",
-      partnerId: 4,
-    },
-    Çağlar: {
-      id: 3,
-      player: "Çağlar",
-      teamName: "Çağlar",
-      partnerId: 10,
-    },
-    "Hüseyin T": {
-      id: 4,
-      player: "Hüseyin T",
-      teamName: "Hüseyin T",
+      teamName: "Sport-Club Freiburg",
       partnerId: 2,
     },
-    Çağatay: {
-      id: 5,
-      player: "Çağatay",
-      teamName: "Çağatay",
-      partnerId: 8,
-    },
-    Barış: {
-      id: 6,
+    "Olympique Lyonnais": {
+      id: 2,
       player: "Barış",
-      teamName: "Barış",
+      teamName: "Olympique Lyonnais",
       partnerId: 1,
     },
-    Levent: {
-      id: 8,
+    Everton: {
+      id: 3,
       player: "Levent",
-      teamName: "Levent",
-      partnerId: 5,
+      teamName: "Everton",
+      partnerId: 4,
     },
-    Ertuğrul: {
-      id: 9,
-      player: "Ertuğrul",
-      teamName: "Ertuğrul",
-      partnerId: 11,
-    },
-    Batu: {
-      id: 10,
-      player: "Batu",
-      teamName: "Batu",
+    "Eintracht Frankfurt": {
+      id: 4,
+      player: "Çağatay",
+      teamName: "Eintracht Frankfurt",
       partnerId: 3,
     },
-    Alperen: {
-      id: 11,
+    "Racing Club de Lens": {
+      id: 5,
       player: "Alperen",
-      teamName: "Alperen",
-      partnerId: 11,
+      teamName: "Racing Club de Lens",
+      partnerId: 6,
+    },
+    "Olympique de Marseille": {
+      id: 6,
+      player: "Batu",
+      teamName: "Olympique de Marseille",
+      partnerId: 5,
+    },
+    "Real Betis": {
+      id: 7,
+      player: "Harun",
+      teamName: "Real Betis",
+      partnerId: 8,
+    },
+    "Wolverhampton Wanderers": {
+      id: 8,
+      player: "Ertuğrul",
+      teamName: "Wolverhampton Wanderers",
+      partnerId: 7,
+    },
+    "VfB Stuttgart": {
+      id: 9,
+      player: "Hüseyin T",
+      teamName: "VfB Stuttgart",
+      partnerId: 10,
+    },
+    PSV: {
+      id: 10,
+      player: "Çağlar",
+      teamName: "PSV",
+      partnerId: 9,
     },
   },
   "season-2": {

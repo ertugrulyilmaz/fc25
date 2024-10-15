@@ -41,9 +41,9 @@ export default function App() {
   };
 
   const IS_DEV = window.location.href.startsWith("http://127.0.0.1:3000");
-  const [season, setSeason] = React.useState("season-2");
+  const [season, setSeason] = React.useState("season-3");
   const [dataUrl, setDataUrl] = React.useState(
-    IS_DEV ? TEST_DATA_URL : DATA_URLS["season-2"]
+    IS_DEV ? TEST_DATA_URL : DATA_URLS["season-3"]
   );
   const [initialWeek, setInitialWeek] = React.useState(1);
 
