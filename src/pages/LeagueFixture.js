@@ -132,13 +132,23 @@ export default function LeagueFixture({ season, initialWeek, fixtureData }) {
                 sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
               >
                 <StyledTableCell align="left">
-                  <img
-                    src={"/fc25/img/" + season + "/" + row.homeTeamId + ".png"}
-                    width={24}
-                    height={24}
-                    style={{ marginRight: 10, verticalAlign: "middle" }}
-                  />
-                  <b>{row.homeTeam}</b>
+                  <Grid container>
+                    <Grid size={1}>
+                      <img
+                        src={"/fc25/img/" + season + "/" + row.homeTeamId + ".png"}
+                        width={24}
+                        height={24}
+                        style={{ marginLeft: 10, verticalAlign: "middle" }}
+                      />
+                    </Grid>
+                    <Grid size={11}>
+                      <b>{row.homeTeam}</b>
+                      <br />
+                      <span style={{ fontStyle: "italic", textDecoration: "underline" }}>
+                        {row.homePlayer}
+                      </span>
+                    </Grid>
+                  </Grid>
                 </StyledTableCell>
                 <StyledTableCell align="center">
                   <span style={{ fontSize: 16 }}>
@@ -147,13 +157,23 @@ export default function LeagueFixture({ season, initialWeek, fixtureData }) {
                   </span>
                 </StyledTableCell>
                 <StyledTableCell align="right">
-                  <b>{row.awayTeam}</b>
-                  <img
-                    src={"/fc25/img/" + season + "/" + row.awayTeamId + ".png"}
-                    width={24}
-                    height={24}
-                    style={{ marginLeft: 10, verticalAlign: "middle" }}
-                  />
+                  <Grid container>
+                    <Grid size={11}>
+                      <b>{row.awayTeam}</b>
+                      <br />
+                      <span style={{ fontStyle: "italic", textDecoration: "underline" }}>
+                        {row.awayPlayer}
+                      </span>
+                    </Grid>
+                    <Grid size={1}>
+                      <img
+                        src={"/fc25/img/" + season + "/" + row.awayTeamId + ".png"}
+                        width={24}
+                        height={24}
+                        style={{ marginLeft: 10, verticalAlign: "middle" }}
+                      />
+                    </Grid>
+                  </Grid>
                 </StyledTableCell>
               </StyledTableRow>
             ))}
