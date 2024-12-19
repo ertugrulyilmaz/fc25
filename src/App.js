@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Container from "@mui/material/Container";
 import "./App.css";
 
@@ -45,7 +45,7 @@ export default function App() {
   const [dataUrl, setDataUrl] = React.useState(
     IS_DEV ? TEST_DATA_URL : DATA_URLS["season-3"]
   );
-  const [initialWeek, setInitialWeek] = React.useState(7);
+  const [initialWeek, setInitialWeek] = React.useState(8);
 
   const handleSeasonChange = (event) => {
     setSeason(event.target.value);
@@ -167,7 +167,6 @@ export default function App() {
       return acc;
     }, {})
   ).sort((a, b) => {
-    console.log(a);
     if (a.p > b.p) {
       return -1;
     } else if (a.p < b.p) {
