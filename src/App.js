@@ -45,7 +45,7 @@ export default function App() {
   const [dataUrl, setDataUrl] = React.useState(
     IS_DEV ? TEST_DATA_URL : DATA_URLS["season-3"]
   );
-  const [initialWeek, setInitialWeek] = React.useState(16);
+  const [initialWeek, setInitialWeek] = React.useState(17);
 
   const handleSeasonChange = (event) => {
     setSeason(event.target.value);
